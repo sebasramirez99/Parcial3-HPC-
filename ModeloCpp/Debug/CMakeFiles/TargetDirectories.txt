@@ -1,0 +1,3 @@
+/home/sebas/Escritorio/Universidad/Hcp3/Parcial3/Parcial3-HPC-/ModeloCpp/Debug/CMakeFiles/rebuild_cache.dir
+/home/sebas/Escritorio/Universidad/Hcp3/Parcial3/Parcial3-HPC-/ModeloCpp/Debug/CMakeFiles/edit_cache.dir
+/home/sebas/Escritorio/Universidad/Hcp3/Parcial3/Parcial3-HPC-/ModeloCpp/Debug/CMakeFiles/ModeloCpp.dir
