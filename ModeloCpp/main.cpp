@@ -33,16 +33,16 @@ int main(int argc, char* argv[]){
 
     Eigen::MatrixXd mean = extraer.Promedio(DataFrame);
 
-    std::cout << DataFrame << std::endl;
-    std::cout <<"\n-------------------------------Promedio----------------------------------------\n"<< std::endl;
-    std::cout <<mean<< std::endl;
+    //std::cout << DataFrame << std::endl;
+    // std::cout <<"\n-------------------------------Promedio----------------------------------------\n"<< std::endl;
+    // std::cout <<mean<< std::endl;
 
-    std::cout <<"\n-------------------------------Normalización----------------------------------------\n"<< std::endl;
+    // std::cout <<"\n-------------------------------Normalización----------------------------------------\n"<< std::endl;
 
     /*El objeto CVSto Eigen (simila a un objeto Dataframe)
     * se normaliza: se optiene una matriz matNormal */
     Eigen::MatrixXd matNormal = extraer.Normalizador(DataFrame);
-    std::cout<<matNormal<<std::endl<<std::endl;
+    //std::cout<<matNormal<<std::endl<<std::endl;
 
     /* A continuación se hará el primer modulo de Machine Learning:
      * se requiere una clase de Regresión Lineal (Implementacion e Interfaz),
@@ -70,20 +70,20 @@ int main(int argc, char* argv[]){
 
      /*se imprime total de filas, las filas de entrenamiento,
       * las filas para pruebas en sus dos sabores*/
-   /**/std::cout<<matNormal.rows()<<std::endl;
+   /*std::cout<<matNormal.rows()<<std::endl;
      std::cout<<X_train.rows()<<std::endl;
      std::cout<<y_train.rows()<<std::endl;
      std::cout<<X_test.rows()<<std::endl;
-     std::cout<<y_test.rows()<<std::endl;
+     std::cout<<y_test.rows()<<std::endl;*/
 
 
-     /* Se necesita imprimir las cantidad de columnas por sabor */
+     /* Se necesita imprimir las cantidad de columnas por sabor
 
    std::cout<<matNormal.cols()<<std::endl;
      std::cout<<X_train.cols()<<std::endl;
      std::cout<<y_train.cols()<<std::endl;
      std::cout<<X_test.cols()<<std::endl;
-     std::cout<<y_test.cols()<<std::endl;
+     std::cout<<y_test.cols()<<std::endl;*/
 
 
 
@@ -146,6 +146,8 @@ int main(int argc, char* argv[]){
       * utilizando la metrica R2*/
 
       float ComprobacionMetrica= RL.R2(y, y_train_hat);
+
+      std::cout<<"Métrica de rendimiento CPP para train (r2_score) "<<std::endl;
       std::cout<<ComprobacionMetrica<<std::endl;
 
       extraer.matrixToFile(y_train_hat, "Prediccion.txt");
@@ -190,6 +192,8 @@ int main(int argc, char* argv[]){
          * utilizando la metrica R2*/
 
          float ComprobacionMetricaTest= RL.R2(y_t, y_test_hat);
+
+         std::cout<<"Métrica de rendimiento CPP para test (r2_score) "<<std::endl;
          std::cout<<ComprobacionMetricaTest<<std::endl;
 
          extraer.matrixToFile(y_test_hat, "PrediccionTest.txt");
