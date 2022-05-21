@@ -37,11 +37,12 @@ int main(int argc, char* argv[]){
     std::cout <<"\n-------------------------------Promedio----------------------------------------\n"<< std::endl;
     std::cout <<mean<< std::endl;
 
+    std::cout <<"\n-------------------------------Normalización----------------------------------------\n"<< std::endl;
 
     /*El objeto CVSto Eigen (simila a un objeto Dataframe)
     * se normaliza: se optiene una matriz matNormal */
     Eigen::MatrixXd matNormal = extraer.Normalizador(DataFrame);
-    /*std::cout<<matNormal<<std::endl<<std::endl;*/
+    std::cout<<matNormal<<std::endl<<std::endl;
 
     /* A continuación se hará el primer modulo de Machine Learning:
      * se requiere una clase de Regresión Lineal (Implementacion e Interfaz),
@@ -78,12 +79,12 @@ int main(int argc, char* argv[]){
 
      /* Se necesita imprimir las cantidad de columnas por sabor */
 
-   /*std::cout<<matNormal.cols()<<std::endl;
+   std::cout<<matNormal.cols()<<std::endl;
      std::cout<<X_train.cols()<<std::endl;
      std::cout<<y_train.cols()<<std::endl;
      std::cout<<X_test.cols()<<std::endl;
      std::cout<<y_test.cols()<<std::endl;
-   */
+
 
 
     /* Se tiene en cuenta que la regresion lineal es un metodo
@@ -104,7 +105,10 @@ int main(int argc, char* argv[]){
      X_test.conservativeResize(X_test.rows(), X_test.cols()+1);
      X_test.col(X_test.cols()-1)=vectorTest;
 
-    /* Se define eñ vector theta, para pasar el alortimo del GD,
+
+   /****************************Entrenamiento**************************************/
+
+    /* Se define el vector theta, para pasar el alortimo del GD,
      * basicamento es un vector de 0 del mismo tamaño de entrenamiento,
      * adicional se declara alfa y el numero de iteraciones*/
      Eigen::VectorXd vectorTheta = Eigen::VectorXd::Zero(X_train.cols());
@@ -147,7 +151,48 @@ int main(int argc, char* argv[]){
       extraer.matrixToFile(y_train_hat, "Prediccion.txt");
 
 
+      /****************************Test**************************************/
 
+       /* Se define el vector theta, para pasar el alortimo del GD,
+        * basicamento es un vector de 0 del mismo tamaño de entrenamiento,
+        * adicional se declara alfa y el numero de iteraciones*/
+        Eigen::VectorXd vectorThetaTest = Eigen::VectorXd::Zero(X_test.cols());
+
+
+        Eigen::VectorXd thetaOutTest;
+        std::vector<float>costoTest;
+
+
+        std::tuple<Eigen::VectorXd, std::vector<float>> salidaGDTest = RL.Gradiente(X_test, y_test,vectorThetaTest,alfa,iterator);
+        std::tie(thetaOutTest, costoTest) = salidaGDTest;
+        /* std::cout<<thetaOut<<std::endl; */
+
+       /* Se quiere observar como decrese la función de costo */
+       /*for(auto v: costo){
+            std::cout<<v<<std::endl;
+        }*/
+
+        /* Acontinuación por propositos de seguridad se exportan el vector de costo y el
+         * vector theta a ficheros*/
+        extraer.vectorToFile(costoTest, "vectorCostoTest.txt");
+        extraer.matrixToFile(thetaOutTest, "vectorThetaTest.txt");
+
+       /*con el proposito de ajustar el modei8 c*/
+        auto MuPromedioTest= extraer.Promedio(DataFrame);
+        auto MuFeaturesTest= MuPromedioTest(0,6);
+        auto EscaladaDataTest= DataFrame.rowwise()-DataFrame.colwise().mean();
+        auto MuEstandarTest= extraer.DesvStandard(EscaladaDataTest);
+        auto DevFeaturesTest= MuEstandarTest(0,6);
+        Eigen::MatrixXd y_test_hat= (X_test*thetaOutTest*DevFeaturesTest).array()+MuFeaturesTest;
+        Eigen::MatrixXd y_t= DataFrame.col(6).bottomRows(268);
+
+        /*A continuacion se determina que tan bueno es nuestro modelo
+         * utilizando la metrica R2*/
+
+         float ComprobacionMetricaTest= RL.R2(y_t, y_test_hat);
+         std::cout<<ComprobacionMetricaTest<<std::endl;
+
+         extraer.matrixToFile(y_test_hat, "PrediccionTest.txt");
 
 
 
